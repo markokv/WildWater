@@ -857,7 +857,7 @@ a.au-btn--white {
 
 .header-stick {
     position: fixed;
-    top: -83px;
+    top: 0;
     -webkit-transition: 0.6s;
     -o-transition: 0.6s;
     -moz-transition: 0.6s;
@@ -883,9 +883,7 @@ a.au-btn--white {
     top: 59px;
 }
 
-.header-stick--show {
-    top: 0;
-}
+/* .header-stick--show removed as header is now permanent */
 
 .header-stick--dark {
     background-color: rgba(0, 0, 0, 0.75);
@@ -896,6 +894,12 @@ a.au-btn--white {
 
 .header-stick--dark nav>ul>li>a {
     color: #eeeeee;
+}
+
+.header-stick nav>ul>li>a:hover,
+.header-stick--dark nav>ul>li>a:hover {
+    color: #ebcd1e !important;
+    cursor: pointer;
 }
 
 .header-stick nav.menu-desktop {
