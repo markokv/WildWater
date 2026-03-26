@@ -6,17 +6,7 @@
     $("#page-loader").fadeOut("slow");
   });
   
-  /* Header Stick */
-  $(window).scroll(function (event) {
-    /* Act on the event */
-    var top = $(document).scrollTop();
-    if (top > 82) {
-      $('.header-stick').addClass('header-stick--show');
-    }
-    else {
-      $('.header-stick').removeClass('header-stick--show');
-    }
-  });
+  /* Header Stick - Removed scroll logic for permanent visibility */
   /* Menu Canvas */
   $('.canvas-menu-button').on('click', function () {
     if ($('#menu-canvas').hasClass('menu-canvas--hidden')) {
