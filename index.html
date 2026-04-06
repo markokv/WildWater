@@ -23,6 +23,7 @@
   <!-- Main CSS -->
   <link rel="stylesheet" type="text/css" href="css/font.css">
   <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/scroll-snap.css">
 
 </head>
 
@@ -112,17 +113,16 @@
         <nav class="menu-mobile hidden">
           <ul class="ul--no-style">
             <li>
-              <i class="fa fa-plus menu-mobile__more"></i>
               <a href="">
                 O nama
               </a>
             </li>
             <li>
-              <i class="fa fa-plus menu-mobile__more"></i>
-              <a href="">
+              <i class="fa fa-angle-down menu-mobile__more"></i>
+              <a href="javascript:void(0);" class="menu-mobile__more-text">
                 Avanture
               </a>
-              <ul class="ul--no-style">
+              <ul class="ul--no-style" style="display: none;">
                 <li>
                   <a href="">
                     eFoil
@@ -146,13 +146,11 @@
               </ul>
             </li>
             <li>
-              <i class="fa fa-plus menu-mobile__more"></i>
               <a href="">
                 Za kompanije
               </a>
             </li>
             <li>
-              <i class="fa fa-plus menu-mobile__more"></i>
               <a href="">
                 Izleti
               </a>
@@ -169,7 +167,7 @@
     <!-- End Header Mobile -->
     <!-- End Header Stick -->
     <!-- Slider -->
-    <section class="slide1">
+    <section class="slide1 snap-section">
       <!-- revolution slider begin -->
       <div class="rev_slider_wrapper">
         <div id="revolution-slider2" class="rev_slider" data-version="5.4.4" style="display: none;">
@@ -201,8 +199,9 @@
     </section>
     <!-- End Slider -->
     <div id="down"></div>
+    <hr class="section-divider">
     <!-- Service 2 -->
-    <section class="service-2">
+    <section class="service-2 snap-section snap-section-flex">
       <div class="container clearfix">
         <div class="service-2-wrap clearfix">
           <div class="service-2__left wow fadeInLeft" data-wow-duration="1s">
@@ -268,8 +267,9 @@
       </div>
     </section>
     <!-- End Service 2 -->
+    <hr class="section-divider">
     <!-- Recent Project -->
-    <section class="recent-project">
+    <section class="recent-project snap-section snap-section-flex">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-6 col-md-6 col-sm-12 col-12">
@@ -372,8 +372,9 @@
       </div>
     </section>
     <!-- End Recent Project -->
+    <hr class="section-divider">
     <!-- Our Team -->
-    <section class="our-team">
+    <section class="our-team snap-section snap-section-flex">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-5 col-md-6 col-sm-12 col-12">
@@ -529,8 +530,9 @@
       </div>
     </section>
     <!-- End Our Team -->
+    <hr class="section-divider">
     <!-- Recent News -->
-    <section class="recent-news">
+    <section class="recent-news snap-section snap-section-flex">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-5 col-md-6 col-sm-12 col-12">
@@ -610,8 +612,9 @@
       </div>
     </section>
     <!-- End Recent News -->
+    <hr class="section-divider">
     <!-- Testimonial -->
-    <section class="testi">
+    <section class="testi snap-section snap-section-flex">
       <div class="parallax parallax-testi">
         <div class="container">
           <div class="row justify-content-center">
@@ -632,6 +635,9 @@
 
     </section>
     <!-- End Testimonial -->
+    <hr class="section-divider">
+    <!-- Bottom Page: Partner + Footer + Copyright -->
+    <div class="bottom-page snap-section">
     <!-- Partner -->
     <section class="partner partner-2">
       <div class="section-content section-content--w1792">
@@ -764,6 +770,8 @@
       </div>
     </section>
     <!-- End Copyright -->
+    </div>
+    <!-- End Bottom Page -->
     <!-- Back to top -->
     <a href="" id="btn-to-top">
       <i class="fa fa-chevron-up"></i>
@@ -796,6 +804,92 @@
   <script type="text/javascript" src="js/main.js"></script>
   <script type="text/javascript" src="js/revo-custom.js"></script>
   <script type="text/javascript" src="js/wow-custom.js"></script>
+  <script>
+    // Fade-in sections as they scroll into view
+    (function() {
+      var sections = document.querySelectorAll('.snap-section');
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          }
+        });
+      }, { threshold: 0.15 });
+      sections.forEach(function(section) {
+        observer.observe(section);
+      });
+    })();
+
+    // Auto-hide navbar after 2 seconds of inactivity
+    (function() {
+      var headers = document.querySelectorAll('.header-stick, .header-mobile');
+      if (headers.length === 0) return;
+      var heroSection = document.querySelector('.slide1');
+      var hideTimer = null;
+      var mouseOverHeader = false;
+      var onHeroSection = true;
+
+      // Track whether hero section is in view
+      if (heroSection) {
+        var heroObserver = new IntersectionObserver(function(entries) {
+          onHeroSection = entries[0].isIntersecting;
+          if (onHeroSection) {
+            clearTimeout(hideTimer);
+            headers.forEach(function(header) { header.classList.remove('navbar-hidden'); });
+          } else {
+            resetTimer();
+          }
+        }, { threshold: 0.3 });
+        heroObserver.observe(heroSection);
+      }
+
+      function showNavbar() {
+        headers.forEach(function(header) { header.classList.remove('navbar-hidden'); });
+        if (!onHeroSection) {
+          resetTimer();
+        }
+      }
+
+      function hideNavbar() {
+        if (!mouseOverHeader && !onHeroSection) {
+          headers.forEach(function(header) { header.classList.add('navbar-hidden'); });
+        }
+      }
+
+      function resetTimer() {
+        clearTimeout(hideTimer);
+        if (!onHeroSection) {
+          hideTimer = setTimeout(hideNavbar, 2000);
+        }
+      }
+
+      // Show on scroll
+      window.addEventListener('scroll', showNavbar);
+
+      // Show when mouse moves near top of viewport (within 80px)
+      document.addEventListener('mousemove', function(e) {
+        if (e.clientY < 80) {
+          showNavbar();
+        }
+      });
+
+      // Keep visible while mouse is over the header
+      headers.forEach(function(header) {
+        header.addEventListener('mouseenter', function() {
+          mouseOverHeader = true;
+          clearTimeout(hideTimer);
+          showNavbar();
+        });
+
+        header.addEventListener('mouseleave', function() {
+          mouseOverHeader = false;
+          if (!onHeroSection) {
+            resetTimer();
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 
 </html>

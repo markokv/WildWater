@@ -124,7 +124,7 @@
 
   });
   /* Menu Mobile */
-  $('.menu-mobile__button').on('click', function () {
+  $('.menu-mobile__button').on('click', function (e) {
     if ($(this).hasClass('click')) {
       $(this).removeClass('click');
     }
@@ -132,14 +132,32 @@
       $(this).addClass('click');
     }
     $('nav.menu-mobile').slideToggle("400");
+    e.stopPropagation();
   });
 
-  $('.menu-mobile__more').on('click', function () {
-
-    var sub_list = $(this).parent().find('ul');
-    $(this).toggleClass("fa-minus");
+  $('.menu-mobile__more, .menu-mobile__more-text').on('click', function (e) {
+    if ($(e.target).is('a')) {
+      e.preventDefault();
+    }
+    var parent = $(this).closest('li');
+    var sub_list = parent.find('> ul');
+    var icon = parent.find('> .menu-mobile__more');
+    
+    icon.toggleClass("fa-angle-down fa-angle-up");
     sub_list.slideToggle("400");
+  });
 
+
+  // Close mobile menu when clicking outside
+  $(document).on('click', function (e) {
+    var menu = $('nav.menu-mobile');
+    var button = $('.menu-mobile__button');
+    if (!menu.is(e.target) && menu.has(e.target).length === 0 && !button.is(e.target) && button.has(e.target).length === 0) {
+      if (button.hasClass('click')) {
+        button.removeClass('click');
+        menu.slideUp("400");
+      }
+    }
   });
   /* What client say */
   $('#owl-client-say').owlCarousel({
